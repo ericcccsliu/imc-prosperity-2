@@ -17,7 +17,7 @@ This repository contains research and algorithms for our team, Linear Utility, i
         <a href="https://github.com/jcgs2503">
           <img src="https://avatars.githubusercontent.com/u/63511765?v=4?s=100" width="100px;" alt="Jerry Chang"/>
           <br /><sub><b>Jerry Chang</b></sub></a>
-        <br /><a href="https://www.linkedin.com/in/chieh-chang/" title="LinkedIn">🔗 LinkedIn</a>
+        <br /><sub><a href="https://www.linkedin.com/in/chieh-chang/" title="LinkedIn">🔗 LinkedIn</a></sub>
         <br /><a href="#research-jcgs2503" title="Research">🔬</a>
         <a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=jcgs2503" title="Code">💻</a>
       </td>
@@ -25,7 +25,7 @@ This repository contains research and algorithms for our team, Linear Utility, i
         <a href="https://github.com/ericcccsliu">
           <img src="https://avatars.githubusercontent.com/u/62641231?v=4?s=100" width="100px;" alt="Eric Liu"/>
           <br /><sub><b>Eric Liu</b></sub></a>
-        <br /><a href="https://www.linkedin.com/in/ericccccc/" title="LinkedIn">🔗 LinkedIn</a>
+        <br /><sub><a href="https://www.linkedin.com/in/ericccccc/" title="LinkedIn">🔗 LinkedIn</a></sub>
         <br /><a href="#research-ericcccsliu" title="Research">🔬</a>
         <a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=ericcccsliu" title="Code">💻</a>
       </td>
@@ -33,14 +33,14 @@ This repository contains research and algorithms for our team, Linear Utility, i
         <a href="https://github.com/sreekar-bathula">
           <img src="https://avatars.githubusercontent.com/u/86486991?v=4?s=100" width="100px;" alt="Sreekar Bathula"/>
           <br /><sub><b>Sreekar Bathula</b></sub></a>
-        <br /><a href="https://www.linkedin.com/in/sreekar-bathula/" title="LinkedIn">🔗 LinkedIn</a>
+        <br /><sub><a href="https://www.linkedin.com/in/sreekar-bathula/" title="LinkedIn">🔗 LinkedIn</a></sub>
         <br /><a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=sreekar-bathula" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/liu-nathan">
           <img src="https://avatars.githubusercontent.com/u/113719450?v=4?s=100" width="100px;" alt="liu-nathan"/>
           <br /><sub><b>liu-nathan</b></sub></a>
-        <br /><a href="https://www.linkedin.com/in/nl-nathanliu/" title="LinkedIn">🔗 LinkedIn</a>
+        <br /><sub><a href="https://www.linkedin.com/in/nl-nathanliu/" title="LinkedIn">🔗 LinkedIn</a></sub>
         <br /><a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=liu-nathan" title="Research">🔬</a>
       </td>
     </tr>
