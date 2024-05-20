@@ -67,6 +67,10 @@ This repository contains all of our code–including internal tools, research no
 
 Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This, overall, was a good decision–while it didn't pay off as much as we hoped (more on this later), we were able to tailor our tools heavily for our own needs. We built two main tools for use throughout the competition: a backtester and a visualization dashboard. In our backtester, we were able to simulate trades taking our limit orders, allowing us to approximate PNL from market-making, which was a feature that the dominant open-source backtester notably lacked. Our visualization dashboard allowed us to observe price trends, investigate individual trades, and visualize the orderbook, which helped immensely in most rounds. 
 
+<img width="1148" alt="image" src="https://github.com/ericcccsliu/imc-prosperity-2/assets/63511765/9716b335-d177-4c90-8f57-896a87f558ba">
+<img width="1211" alt="image" src="https://github.com/ericcccsliu/imc-prosperity-2/assets/63511765/c667bf5a-afc5-47c9-bfbf-1a81df9f621f">
+<img width="1232" alt="image" src="https://github.com/ericcccsliu/imc-prosperity-2/assets/63511765/c88d2baf-d1c1-4de6-bd78-de72fd918fc6">
+
 
 ## round 1️⃣
 
