@@ -1,0 +1,21 @@
+predict where price is moving simply by looking at mm volumes
+look at market maker -> reversion -> take liquidity from underlying symbols 
+
+ROSES: take levels with lower volume because indicator price will trend in that direction
+    - signal is swmid but even more hkajdfsljkadfsljkadkljdsafjkaldsfjas
+    - do it on day 1 
+
+    size <= 35
+
+    fuck this doesn't work backtest pnl negative as fuck 
+
+
+    for pairs trade–consider symbols a, b, pair with no lag 
+    if a increases 5%, b decreases 5%, from t-1 to t, expect perhaps a and b will increase/decrease 0% from t-1 to t+1
+
+    linear regress 
+    predict a returns from t - 1 to t + 1 using a returns from t - 1 to t, b returns from t - 1 to t 
+    predict b returns from t - 1 to t + 1 using a returns from t - 1 to t, b returns from t - 1 to t 
+
+
+mean reversion linear regression prediction on multiplier 
