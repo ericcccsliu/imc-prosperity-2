@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-This repository contains research and algorithms for our team, Linear Utility, in IMC Prosperity 2024. We placed 2nd, with an overall score of 3,501,647 seashells, and took home $10,000 in prize money. 
+This repository contains research and algorithms for our team, Linear Utility, in IMC Prosperity 2024. We placed 2nd globally, with an overall score of 3,501,647 seashells, and took home $10,000 in prize money. 
 
 ## contributors ✨
 
@@ -51,23 +51,36 @@ This repository contains research and algorithms for our team, Linear Utility, i
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+## the competition 🏆
 
-# tools/organization 🛠️
+IMC Prosperity 2024 was an algorithmic trading competition that lasted over 15 days, with over 9000 teams participating globally. In the challenge, we were placed on our own archipelago, and tasked with trading various financial products, such as amethysts, starfruit, orchids, coconuts, and more, with the goal of maximizing seashells: the underlying currency of our island. The products available to trade started with amethysts and starfruit in round 1. With each subsequent round, more products would be added, and at the end of each round, our trading algorithm would be evaluated against bot participants in the marketplace, whose behavior we could try and predict through historical data. The PNL from this independent evaluation would then be compared against all other teams. 
+
+In addition to the main algorithmic trading focus, the competition also consisted of manual trading challenges in each round. The focus of these varied widely, and in the end, manual trading accounted for just a small fraction of our PNL. 
+
+For documentation on the algorithmic trading environment, and more context about the competition, feel free to consult the [Prosperity 2 Wiki](https://imc-prosperity.notion.site/Prosperity-2-Wiki-fe650c0292ae4cdb94714a3f5aa74c85). 
+
+## organization 📂
+
+This repository contains all of our code–including internal tools, research notebooks, raw data and backtesting logs, and all versions of our main algorithmic trader code. The repository is organized by round. Our backtester mostly remained unchanged from round 1, but we simply copied its files over to each subsequent round, so you'll find a version of that in each folder. Within each round, you can locate the algorithmic trading code we used in our final submission by looking for the latest version–for example, for round 1, we used [`round_1_v6.py`](https://github.com/ericcccsliu/imc-prosperity-2/blob/main/round1/round_1_v6.py) for our final submission. Our visualization dashboard is located in the `dashboard` folder. 
+
+## tools 🛠️
+
+Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This, overall, was a good decision–while it didn't pay off as much as we hoped (more on this later), we were able to tailor our tools heavily for our own needs. We built two main tools for use throughout the competition: a backtester and a visualization dashboard. In our backtester, we were able to simulate trades taking our limit orders, allowing us to approximate PNL from market-making, which was a feature that the dominant open-source backtester notably lacked. Our visualization dashboard allowed us to observe price trends, investigate individual trades, and visualize the orderbook, which helped immensely in most rounds. 
 
 
-# round 1️⃣
+## round 1️⃣
 
 
-# round 2️⃣
+## round 2️⃣
 
 
-# round 3️⃣
+## round 3️⃣
 
 
-# round 4️⃣
+## round 4️⃣
 
 
-# round 5️⃣
+## round 5️⃣
 
 
 
