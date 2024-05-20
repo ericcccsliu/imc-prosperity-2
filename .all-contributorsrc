@@ -16,6 +16,24 @@
         "research",
         "code"
       ]
+    },
+      "login": "ericcccsliu",
+      "name": "Eric Liu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62641231?v=4",
+      "profile": "https://github.com/ericcccsliu",
+      "contributions": [
+        "research",
+        "code"
+      ]
+    },
+    {
+      "login": "sreekar-bathula",
+      "name": "Sreekar Bathula",
+      "avatar_url": "https://avatars.githubusercontent.com/u/86486991?v=4",
+      "profile": "https://github.com/sreekar-bathula",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
