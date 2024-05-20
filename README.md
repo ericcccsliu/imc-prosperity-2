@@ -70,6 +70,7 @@ Instead of relying heavily on open-source tools for visualization and backtestin
 
 ## round 1️⃣
 
+In round 1, we had access to two symbols to trade: amethysts and starfruit. For amethysts, the 
 
 ## round 2️⃣
 
