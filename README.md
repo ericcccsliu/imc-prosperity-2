@@ -16,7 +16,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jcgs2503"><img src="https://avatars.githubusercontent.com/u/63511765?v=4?s=100" width="100px;" alt="Jerry Chang"/><br /><sub><b>Jerry Chang</b></sub></a><br /><a href="#research-jcgs2503" title="Research">🔬</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jcgs2503"><img src="https://avatars.githubusercontent.com/u/63511765?v=4?s=100" width="100px;" alt="Jerry Chang"/><br /><sub><b>Jerry Chang</b></sub></a><br /><a href="#research-jcgs2503" title="Research">🔬</a> <a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=jcgs2503" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
