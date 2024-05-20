@@ -4,7 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
-this repository contains research and algorithms for team Linear Utility in IMC Prosperity 2024
+This repository contains research and algorithms for our team, Linear Utility, in IMC Prosperity 2024. We placed 2nd, with an overall score of 3,501,647 seashells, and took home $10,000 in prize money. 
 
 ## contributors ✨
 
