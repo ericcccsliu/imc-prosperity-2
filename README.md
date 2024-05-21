@@ -71,7 +71,8 @@ Instead of relying heavily on open-source tools for visualization and backtestin
 
 The dashapp we developed helped us a lot during the early rounds on finding how to generate more pnl and looking for desirable trades our algorithm didn't do or undesirable trades our algorithm did. The most helpful feature in my opinion was the syncing feature, where we coded out such that the whole dashapp would be synced to the exact timestamp whenever we clicked on the dash charts. We also enabled manually typing in timestamp and displaying the orderbook at the given timestamp. 
 
-![image](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/fb1ab2d8-72a6-4d95-bbaa-ab15cd578a8d)
+![332262673-fb1ab2d8-72a6-4d95-bbaa-ab15cd578a8d](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/5878101d-53e3-46c1-a646-85bb84bd0b3d)
+
 
 
 ## round 1️⃣
