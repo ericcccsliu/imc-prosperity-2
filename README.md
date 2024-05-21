@@ -136,7 +136,13 @@ We tried various approaches in parameterizing this trade. A simple, first-pass s
 
 Therefore, we developed a more adaptive algorithm for spreads. We traded on a modified z-score, using a hardcoded mean and a rolling window standard deviation, with the window set relatively small. Then, we thresholded the z-score, selling spreads when our z-score went above a certain value and buying when the z-score dropped below. The idea here was that we wanted to wait until the price of spreads reached a local minima/maxima before trading. By using a small window for our rolling standard deviation, we'd see our z-score spike when the standard deviation drastically dropped–and this would often happen right as the price started reverting. This idea bumped our backtest pnl up to ~135k. 
 
-After results from this round were released, we found that our pnl had a significant amount of slippage compared to our backtests–we made only 111k seashells from our algo. Nevertheless, we got a bit lucky–all the teams ahead of us in this round seemed to overfit significantly more, as we were ranked #2 overall.
+
+![newplot (2)](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/0db11d51-8916-4ed5-83f6-82faeb846267)
+<p align="center">
+  <em>a plot of spread prices and our modified z-score, as well as z-score thresholds (in green) to trade at</em>
+</p>
+
+After results from this round were released, we found that our actual pnl had a significant amount of slippage compared to our backtests–we made only 111k seashells from our algo. Nevertheless, we got a bit lucky–all the teams ahead of us in this round seemed to overfit significantly more, as we were ranked #2 overall.
 
 ## round 4️⃣
 
