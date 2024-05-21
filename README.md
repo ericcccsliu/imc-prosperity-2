@@ -26,7 +26,6 @@ This repository contains research and algorithms for our team, Linear Utility, i
           <img src="https://avatars.githubusercontent.com/u/62641231?v=4?s=100" width="100px;" alt="Eric Liu"/>
           <br /><sub><b>Eric Liu</b></sub></a>
         <br /><sub><a href="https://www.linkedin.com/in/ericccccc/" title="LinkedIn">🔗 LinkedIn</a></sub>
-        <br /><sub><a href="https://www.ericsliu.xyz/" title="Website">🔗 Website</a></sub>
         <br /><a href="#research-ericcccsliu" title="Research">🔬</a>
         <a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=ericcccsliu" title="Code">💻</a>
       </td>
@@ -168,11 +167,13 @@ As a last-ditch attempt in this front, we recalled that last year's competition 
 
 These discoveries were quite silly, but nonetheless, our goal was to maximize pnl, and as the data from last year was publically available on the internet, we felt like this was still fair game. The rest of our efforts in this competition centered around maximizing the value we could extract from the market with our new knowledge. We believed that many other teams might find these same relationships, and therefore optimization was key.
 
-As a first pass, we 
+As a first pass, we simply bought/sold coconuts and roses when our predicted price rose/fell (beyond some threshold to account for spread costs) over a certain number of future iterations. While this worked spectacularly (in comparison to our pnl from literally all previous rounds), we thought we could do better. Indeed, with the data from last year, we had all local maxima/minima, and thus we could theoretically time our trades perfectly and extract max. value. 
 
-One intersting thing worth mentioning would be our dynamic programming algorithm. We were confused by why dp would perform better than simply buying/selling knowing how the market moves at the next timestep. With some quick examples and discussion, we quickly figured out that the reason dp outperforms is because for certain products even if you buy/sell all the existing orders you can't get to the desired position (basically the position limit). For certain products you'd need to buy everything for 3 timestamps in order to get to full desired position. A simple example you can probably go through is to imagine a product having a price over time being: 8 -> 7 -> 12, then settle at 10. If your position limit is 2, and you can buy/sell any quantity at the given price each iteration, the optimal trading would be: sell 2 -> buy 4 -> sell 4, pnl = 16. Now imagine you can at most buy/sell 2 at a time, then with the same logic you would want to sell 2 -> buy 2 -> sell 2, pnl =  6, but in reality you actually want to buy 2 -> buy 2 -> sell 2, pnl = 14. 
+To do this systematically across the three symbols we wanted to trade (roses, coconuts, and gift baskets, due to their natural correlation with roses), we developed a dynamic programming algorithm. Our algorithm took many factors into account–costs of crossing spread, the volume we could take at iteration (the volume on the orderbook), and our volume limits.
 
-Knowing this, it's evident that a simple dp algorithm of 3 states (-1, 0, +1) as position is not enough, and we need to take into account both crossing spread as well as the volume we can take each iteration given the spread, and the volume limit. We were able to simplify and model this with this following dp algorithm:
+The motivation behind the complexity of our dp algorithm was the fact that, at each iteration, we couldn't necessarily achieve our full desired position–therefore, we needed a state for each potential position that we could feasibly achieve. A simple example of this is to imagine a product going through the following prices: 
+$$8 \rightarrow 7 \rightarrow 12 \rightarrow 10$$
+With a position limit of 2, and with sufficient volume on the orderbook, the optimal trading would be: sell 2 -> buy 4 -> sell 4, with a pnl of 16. Now imagine if you could only buy/sell 2 shares at each iteration. Then, the optimal solution would change–you'd want to buy 2 -> buy 2 -> sell 2, with an overall pnl of 14. 
 
 ```python
 def optimal_trading_dp(prices, spread, volume_pct):
