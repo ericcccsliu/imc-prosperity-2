@@ -72,6 +72,9 @@ Instead of relying heavily on open-source tools for visualization and backtestin
 The dashapp we developed helped us a lot during the early rounds on finding how to generate more pnl and looking for desirable trades our algorithm didn't do or undesirable trades our algorithm did. The most helpful feature in my opinion was the syncing feature, where we coded out such that the whole dashapp would be synced to the exact timestamp whenever we clicked on the dash charts. We also enabled manually typing in timestamp and displaying the orderbook at the given timestamp. 
 
 ![332262673-fb1ab2d8-72a6-4d95-bbaa-ab15cd578a8d](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/5878101d-53e3-46c1-a646-85bb84bd0b3d)
+<p align="center">
+  <em>we used to have actual section headers, but at some point we (Jerry and Eric) got hungry and started editing them</em>
+</p>
 
 
 
@@ -80,9 +83,9 @@ The dashapp we developed helped us a lot during the early rounds on finding how 
 In round 1, we had access to two symbols to trade: amethysts and starfruit. 
 
 ### amethysts 🔮
-Amethysts were fairly simple, as the fair price clearly never deviated from 10,000. As such, we wrote our algorithm to trade against bids above 10,000 and asks below 10,000. Besides taking orders, our algorithm also would market-make, placing bids and asks below and above 10,000, respectively, with a certain edge. Using our backtester, we gridsearched over several different values to find the most profitable edge to request. This worked well, getting us into the 30k range for pnl on backtests.
+Amethysts were fairly simple, as the fair price clearly never deviated from 10,000. As such, we wrote our algorithm to trade against bids above 10,000 and asks below 10,000. Besides taking orders, our algorithm also would market-make, placing bids and asks below and above 10,000, respectively, with a certain edge. Using our backtester, we gridsearched over several different values to find the most profitable edge to request. This worked well, getting us about 16k seashells over backtests
 
-However, through looking at backtest logs in our dashapp, we discovered that many profitable trades were prevented by our position limits, as we were unable to long or short more than 20 amethysts (and starfruit) at any given moment. To fix this issue, we implemented a strategy to clear our position–our algorithm would do 0 ev trades, if available, just to get the position closer to 0, so that we'd be able to do more positive ev trades later on. This strategy bumped our pnl up a bit, getting us closer to 33,000. 
+However, through looking at backtest logs in our dashapp, we discovered that many profitable trades were prevented by our position limits, as we were unable to long or short more than 20 amethysts (and starfruit) at any given moment. To fix this issue, we implemented a strategy to clear our position–our algorithm would do 0 ev trades, if available, just to get the position closer to 0, so that we'd be able to do more positive ev trades later on. This strategy bumped our pnl up by about 3%. 
 
 ### starfruit ⭐
 For starfruit, we initially struggled to find a good fair price since its midprice is pretty noisy and would be fluctuating because of over/under aggressive orders. However, as we navigate through out dashapp we found out that at all times there seems to be a market making bot quoting relatively large sizes on both ends. Using the market making mid as a fair price turned out to be much less noisy and generated more pnl in backtests. We tested our algorithm on the website submission and with the pnl data given, we figured out that the website was also marking our pnl to the market making mid instead of the mid price. We were able to verify this by calculating internal pnl graph and it surprisingly matched the pnl graph given by website well. This boosted our confidence in using market making mid as fair price. Besides this, some research on the fair price showed that starfruit was slightly mean reverting, therefore we also implemented that in our fair calculation. The rest was very similar to amethysts where we took orders and quoted orders with a certain edge, and finally optimizing the parameters with a grid search.
