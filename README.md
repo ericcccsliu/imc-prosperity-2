@@ -125,7 +125,7 @@ Even with these optimizations, we still were beat out by the surge of teams who 
 
 Gift baskets, chocolate, roses, and strawberries were introduced in round 3. This round we mainly traded spreads, meaning the product of basket - synthetic, where synthetic is the sum of the price of products in a basket.
 
-### Spread
+### spread 🧺
 This round, similar to last round, we had two hypotheses when staring at the given data. First hypothesis is that the synthetic would be leading baskets or vice versa, and the second hypothesis was that the spread is simply just mean reverting. We also seperated our workload and had eric work on leading indicators while jerry working on spread mean reverting strategy. **Eric, again, was unable to find any significant result cuz he's shit. Meanwhile, jerry made all the pnl with his incredible mean reverting strategy.** Initially, the mean reverting strategy was naive and hardcoded with a numbers optimized from past data. However, we didn't like hardcoding thresholds since hardcoding itself is very overfitting. Therefore, we came up with an adaptive yet simple formula for spreads. Our idea was that the mean of spread could be hardcoded because there should be an underlying reason for the spread value (i.e. the price of the basket itself), and the value itself wouldn't change drastically over a short period of time. However, the volatility of the spread itself is not really meaningful besides the fluctuations caused by supply/demand. Therefore we used a modified z score, using a hardcoded mean while a moving standard deviation. This turned out to work decently since the performance was similar across different days and dataset, while if we optimize the hardcoded threshold over different days, the pnl would have a high variance due to the hindsight bias of optimization. Although the pnl we generated this round was much less than round 2, we had faith because we thought the goal of round 3 is to not overfit and not lose money instead of make a lot of pnl.
 
 After round 3, our team was ranked #2 overall.
@@ -134,7 +134,7 @@ After round 3, our team was ranked #2 overall.
 
 Coconuts and coconuts coupons are introduced in round 4.
 
-### Coconuts/Coconuts Coupon
+### coconuts/coconut coupon :coconut:
 This round is fairly simple. By applying the Black Scholes model and calculating the implied volatility, it's evident that the implied volatility is mean reverting around 16. We implemented a mean reverting strategy similar to round 3, and calculated the delta of the coconut coupons at each time in order to hedge with coconuts and gain exposure to vol. However, the delta was around 0.53 while the position limts for coconuts/coconut coupons were 300/600, respectively. This meant that we couldn't be fully hedged when holding 600 coupons (we would be holding 18 delta). Since the coupon is far away from expiry (so gamma didn't matter as much) and holding delta with vega is positive ev but large variance, we ran the variance in hopes of making more from our exposure to vol. This worked out in our backtests but during the submission round we lost a bit because of delta exposure, which in retrospect wasn't a smart move as we were already second place and should've went for low var to keep the lead. 
 
 Besides coconuts coupons trades, we also tried to do prediction on orchids price...
