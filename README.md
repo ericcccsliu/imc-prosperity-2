@@ -88,7 +88,9 @@ Amethysts were fairly simple, as the fair price clearly never deviated from 10,0
 However, through looking at backtest logs in our dashapp, we discovered that many profitable trades were prevented by our position limits, as we were unable to long or short more than 20 amethysts (and starfruit) at any given moment. To fix this issue, we implemented a strategy to clear our position–our algorithm would do 0 ev trades, if available, just to get the position closer to 0, so that we'd be able to do more positive ev trades later on. This strategy bumped our pnl up by about 3%. 
 
 ### starfruit ⭐
-For starfruit, we initially struggled to find a good fair price since its midprice is pretty noisy and would be fluctuating because of over/under aggressive orders. However, as we navigate through out dashapp we found out that at all times there seems to be a market making bot quoting relatively large sizes on both ends. Using the market making mid as a fair price turned out to be much less noisy and generated more pnl in backtests. We tested our algorithm on the website submission and with the pnl data given, we figured out that the website was also marking our pnl to the market making mid instead of the mid price. We were able to verify this by calculating internal pnl graph and it surprisingly matched the pnl graph given by website well. This boosted our confidence in using market making mid as fair price. Besides this, some research on the fair price showed that starfruit was slightly mean reverting, therefore we also implemented that in our fair calculation. The rest was very similar to amethysts where we took orders and quoted orders with a certain edge, and finally optimizing the parameters with a grid search.
+Finding a good fair price for starfruit was tougher, as its price wasn't fixed–it would slowly randomwalk around. Nonetheless, we observed that the price was relatively stable locally. So we created a fair using a rolling average of the mid price over the last *n* timestamps, where *n* was a parameter which we could optimize over in backtests[^1]. 
+
+However, as we navigate through out dashapp we found out that at all times there seems to be a market making bot quoting relatively large sizes on both ends. Using the market making mid as a fair price turned out to be much less noisy and generated more pnl in backtests. We tested our algorithm on the website submission and with the pnl data given, we figured out that the website was also marking our pnl to the market making mid instead of the mid price. We were able to verify this by calculating internal pnl graph and it surprisingly matched the pnl graph given by website well. This boosted our confidence in using market making mid as fair price. Besides this, some research on the fair price showed that starfruit was slightly mean reverting, therefore we also implemented that in our fair calculation. The rest was very similar to amethysts where we took orders and quoted orders with a certain edge, and finally optimizing the parameters with a grid search.
 
 After round 1, our team was ranked #3 overall.
 
@@ -99,6 +101,10 @@ After round 1, our team was ranked #3 overall.
 
 
 ## round 4️⃣
+
+
+
+[^1]: in the discord, we saw many teams using linear regression on past prices for this, likely inspired by [last year's second place submission](https://github.com/ShubhamAnandJain/IMC-Prosperity-2023-Stanford-Cardinal). imho this was a bit silly! doing a linear regression in price space is really just a slightly worse way of performing an average, and you get high multicollinearity since each previous price is highly correlated with its neighbors, and you can really easily overfit (for example, if prices in your data slowly trended up, your learned LR coefficients can add up to be >1, meaning that your algo will bias towards buying, which might be spurious) 
 
 
 ## round 5️⃣
