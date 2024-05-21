@@ -67,8 +67,6 @@ This repository contains all of our code–including internal tools, research no
 
 Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This, overall, was a good decision–while it didn't pay off as much as we hoped (more on this later), we were able to tailor our tools heavily for our own needs. We built two main tools for use throughout the competition: a backtester and a visualization dashboard. 
 
-### backtester 🔙
-
 ### dashapp 💨
 
 The dashapp we developed helped us a lot during the early rounds on finding how to generate more pnl and looking for desirable trades our algorithm didn't do or undesirable trades our algorithm did. The most helpful feature in my opinion was the syncing feature, where we coded out such that the whole dashapp would be synced to the exact timestamp whenever we clicked on the dash charts. We also enabled manually typing in timestamp and displaying the orderbook at the given timestamp. 
@@ -107,36 +105,124 @@ After round 1, our team was ranked #3 in the world overall. We had an algo tradi
 ## round 2️⃣
 
 ### orchids 🥀
-Orchids were introduced in round 2, as well as a bunch of data on sunlight, humidity, import/export tariffs, and shipping costs. The premise was that orchids were grown on a separate island[^4], and had to be imported–subject to import tariffs and shipping costs, and that they would degrade with suboptimal levels of sunlight and humidity. We were able to trade orchids both in a market on our own island, as well as through importing them from the South archipelago. With this, we had two initial approaches. The obvious approach, to us, was to look for alpha in all the data available, investigating if the price of orchids could be predicted using sunlight, humidity, etc. The other approach involved understanding exactly how the mechanisms for trading orchids worked, as the documentation was fairly unclear. Thus, we split up: Eric looked for alpha in the historical data while Jerry worked on understanding the actual trading environment.
-
-Finding tradable correlations in the historical data was tougher than we initially thought. Some things that we tried were[^5]: 
-- Just trying to find correlations to orchids returns from returns in sunlight, humidity, tarriffs, costs. Initial results from this seemed interesting–but the correlations we found here were likely spurious.
-- Linear regressions from returns in sunlight, humidity, etc., to returns in orchids. We tried varying timeframes–first predicting orchids returns in the same timeframe as the returns in the predictors, and then predicting using lagged returns–building models that predicted future orchids returns over some timeframe using past returns in each of the predictors.
-- Feature engineering with the various features given and performing the previous two steps again with the newly constructed features
-All of these failed to leave us with a convincing model, leading us to believe that the data given was a bit of a distraction[^6]. 
-
-Meanwhile, Jerry was having much better luck. In experimenting around with the trading environment, we realized that there was a massive taker in the local orchids market. Sell orders–and just sell orders–just a bit above the best bids would be instantly taken for full size. This, combined with low implied ask prices from the foreign market, meant that we could simply put large sell orders locally and simultaneously buy from the south archipelago for an arbitrage. As a first pass, our algorithm running this strategy made 60k seashells over over a fifth of a day. From here, some quick further optimization brought our website test pnl to just over 100k seashells, giving us a projected profit of 500k over a full day. 
-
-While we figured this out independently, someone in the discord leaked this same strategy–which was quite unfortunate from our standpoint, as we knew that many teams would be able to implement the exact same thing and get the same pnl as us. With some noise from slight differences in implementation, we knew that we very well could end up dropping many places, if other teams with the same strategy simply got a bit luckier. So, we spent lots of time desperately searching for any further optimization on the arbitrage. We tested out different prices for sell orders in the local market, and found that using a price of `foreign ask price - 2` worked best. However, with this fixed level for our sell orders, we worried about changes in the market preventing this level from being consistently filled. As such, we came up with an "adaptive edge" algorithm, which looked at how much volume we got at each iteration (with the maximum, nominal volume being 100 lots). If the average volume we received was below some threshold, we'd start moving our sell order level around, automatically searching for a new level to maximize profits. 
-
-Even with these optimizations, we still were beat out by the surge of teams who also found the arbitrage. We dropped all the way to 17th place, with a profit of 573,000 seashells from algo trading. We were within 20k of the second place team, and 100k away from the first place team, Puerto Vallarta, who seemed to have figured something out this round that no other teams could find. 
+Orchids were introduced in round 2, as well as a bunch of data on sunlight, humidity, import/export tariffs, and shipping costs. With this, we had two initial approaches. The obvious approach, to us, was to look for alpha in all the data available, investigating if the price of orchids could be predicted using sunlight, humidity, etc. The other approach involved understanding exactly how the mechanisms for trading orchids worked. and the slightly non trivial one was to look for arbitrage opportunities from import/export (the negative import tariff sort of triggered us to look into arb). Thus, we separated our work into eric looking for alpha in humidity and sunlight while jerry look for arbitrage opportunities. It turned out that eric couldn't find any alpha from humidity and sunlight, and even if there was it was very insignificant due to the amount of data we were given. We were desperate for a while until jerry uploaded his script and printed the straightest pnl line we've ever seen (60k in 100k timestamps). It was quite obvious at that point that we should focus more on arb than alpha. With more optimization on edge and deeper understandings about how the import/export works, we were able to double the amount of pnl to 120k in 100k timestamps. At this point, we should've just tested out how the bots trade against our quotes and do some quantitative analysis on it, but instead what we did was to manually optimizing over quoting with different edges and simply try to "guess" the best level of quoting. We turned out using the foreign ask price - 2 as our quoting level, which turned out to be pretty good but could've been better if we had did quantitative analysis on levels and found out about some rounding issues. The concern we had after this was that we might've been overfiting and the stake was high since if we ever quoted above the highest level the bot would trade at then we would've gotten 0 volume and made 0 pnl, therefore, we came up with an algorithm that detects how much volume we're getting each iteration and adapt the edge of quoting to that data. In backtest, we were able to get adaptive edge to around 100k but nothing more. We ended up using a combination of foreign ask - 2 and adaptive edge with adaptive edge triggered if we're not getting any volume at the level we're quoting at. This turned out to be kinda silly because the adpative edge algorithm was somewhat complicated and hard to control.
 
 ## round 3️⃣
 
 Gift baskets, chocolate, roses, and strawberries were introduced in round 3. This round we mainly traded spreads, meaning the product of basket - synthetic, where synthetic is the sum of the price of products in a basket.
 
 ### Spread
-This round, similar to last round, we had two hypotheses when staring at the given data. First hypothesis is that the synthetic would be leading baskets or vice versa, and the second hypothesis was that the spread is simply just mean reverting. We also seperated our workload and had eric work on leading indicators while jerry working on spread mean reverting strategy. Initially, the mean reverting strategy was naive and hardcoded with a numbers optimized from past data. However, we didn't like hardcoding thresholds since hardcoding itself is very overfitting. Therefore, we came up with an adaptive yet simple formula for spreads. Our idea was that the mean of spread could be hardcoded because there should be an underlying reason for the spread value (i.e. the price of the basket itself), and the value itself wouldn't change drastically over a short period of time. However, the volatility of the spread itself is not really meaningful besides the fluctuations caused by supply/demand. Therefore we used a modified z score, using a hardcoded mean while a moving standard deviation. This turned out to work decently since the performance was similar across different days and dataset, while if we optimize the hardcoded threshold over different days, the pnl would have a high variance due to the hindsight bias of optimization. Although the pnl we generated this round was much less than round 2, we had faith because we thought the goal of round 3 is to not overfit and not lose money instead of make a lot of pnl.
+This round, similar to last round, we had two hypotheses when staring at the given data. First hypothesis is that the synthetic would be leading baskets or vice versa, and the second hypothesis was that the spread is simply just mean reverting. We also seperated our workload and had eric work on leading indicators while jerry working on spread mean reverting strategy. **Eric, again, was unable to find any significant result cuz he's shit. Meanwhile, jerry made all the pnl with his incredible mean reverting strategy.** Initially, the mean reverting strategy was naive and hardcoded with a numbers optimized from past data. However, we didn't like hardcoding thresholds since hardcoding itself is very overfitting. Therefore, we came up with an adaptive yet simple formula for spreads. Our idea was that the mean of spread could be hardcoded because there should be an underlying reason for the spread value (i.e. the price of the basket itself), and the value itself wouldn't change drastically over a short period of time. However, the volatility of the spread itself is not really meaningful besides the fluctuations caused by supply/demand. Therefore we used a modified z score, using a hardcoded mean while a moving standard deviation. This turned out to work decently since the performance was similar across different days and dataset, while if we optimize the hardcoded threshold over different days, the pnl would have a high variance due to the hindsight bias of optimization. Although the pnl we generated this round was much less than round 2, we had faith because we thought the goal of round 3 is to not overfit and not lose money instead of make a lot of pnl.
 
 After round 3, our team was ranked #2 overall.
 
 ## round 4️⃣
 
+Coconuts and coconuts coupons are introduced in round 4.
+
+### Coconuts/Coconuts Coupon
+This round is fairly simple. By applying the Black Scholes model and calculating the implied volatility, it's evident that the implied volatility is mean reverting around 16. We implemented a mean reverting strategy similar to round 3, and calculated the delta of the coconut coupons at each time in order to hedge with coconuts and gain exposure to vol. However, the delta was around 0.53 while the position limts for coconuts/coconut coupons were 300/600, respectively. This meant that we couldn't be fully hedged when holding 600 coupons (we would be holding 18 delta). Since the coupon is far away from expiry (so gamma didn't matter as much) and holding delta with vega is positive ev but large variance, we ran the variance in hopes of making more from our exposure to vol. This worked out in our backtests but during the submission round we lost a bit because of delta exposure, which in retrospect wasn't a smart move as we were already second place and should've went for low var to keep the lead. 
+
+Besides coconuts coupons trades, we also tried to do prediction on orchids price...
+
 ## round 5️⃣
+
+After round 5, we saw the first place team making 1 million in a single round from the previous round and immediately knew that it couldn't be a legit strategy because they're pnl is close to theoretical maximum. The only way to achieve theoretical maximum in any market would be to simply know the future. By connecting the dots, we started looking for the dataset from imc prosperity 1 online and ran linear regression on both price space and return space of every single csv files this year and last year. Surprisingly, we found a 0.99 R Squared value on Roses and Diving Gear from last year in returns space, as well as a 0.96 R Squared in price space of coconuts and coconut from last year. At this point we felt kind of trolled by imc because generating new dataset shouldn't be that hard imo. Nevertheless all the algorithm we developed before basically is meaningless and we ran dp on both roses, coconuts, coconut coupons, and baskets. 
+
+One intersting thing worth mentioning would be our dynamic programming algorithm. We were confused by why dp would perform better than simply buying/selling knowing how the market moves at the next timestep. With some quick examples and discussion, we quickly figured out that the reason dp outperforms is because for certain products even if you buy/sell all the existing orders you can't get to the desired position (basically the position limit). For certain products you'd need to buy everything for 3 timestamps in order to get to full desired position. A simple example you can probably go through is to imagine a product having a price over time being: 8 -> 7 -> 12, then settle at 10. If your position limit is 2, and you can buy/sell any quantity at the given price each iteration, the optimal trading would be: sell 2 -> buy 4 -> sell 4, pnl = 16. Now imagine you can at most buy/sell 2 at a time, then with the same logic you would want to sell 2 -> buy 2 -> sell 2, pnl =  6, but in reality you actually want to buy 2 -> buy 2 -> sell 2, pnl = 14. 
+
+Knowing this, it's evident that a simple dp algorithm of 3 states (-1, 0, +1) as position is not enough, and we need to take into account both crossing spread as well as the volume we can take each iteration given the spread, and the volume limit. We were able to simplify and model this with this following dp algorithm:
+
+```python
+def optimal_trading_dp(prices, spread, volume_pct):
+    n = len(prices)
+    price_level_cnt = math.ceil(1/volume_pct)
+    left_over_pct = 1 - (price_level_cnt - 1) * volume_pct
+
+    dp = [[float('-inf')] * (price_level_cnt * 2 + 1) for _ in range(n)]  # From -3 to 3, 7 positions
+    action = [[''] * (price_level_cnt * 2 + 1) for _ in range(n)]  # To store actions
+
+    # Initialize the starting position (no stock held)
+    dp[0][price_level_cnt] = 0  # Start with no position, Cash is 0
+    action[0][price_level_cnt] = ''  # No action at start
+
+    def position(j):
+        if j > price_level_cnt:
+            position = min((j - price_level_cnt) * volume_pct, 1)
+        elif j < price_level_cnt:
+            position = max((j - price_level_cnt) * volume_pct, -1)
+        else:
+            position = 0
+        return position
+    
+    def position_list(list):
+        return np.array([position(x) for x in list])
+
+    for i in range(1, n):
+        for j in range(0, price_level_cnt * 2 + 1):
+            # Calculate PnL for holding, buying, or selling
+            hold = dp[i-1][j] if dp[i-1][j] != float('-inf') else float('-inf')
+            if j == price_level_cnt * 2:
+                buy = dp[i-1][j-1] - left_over_pct*prices[i-1] -  left_over_pct*spread if j > 0 else float('-inf')
+            elif j == 1:
+                buy = dp[i-1][j-1] - left_over_pct*prices[i-1] -  left_over_pct*spread if j > 0 else float('-inf')
+            else:
+                buy = dp[i-1][j-1] - volume_pct*prices[i-1] - volume_pct*spread if j > 0 else float('-inf')
+
+            if j ==  0:
+                sell = dp[i-1][j+1] + left_over_pct*prices[i-1] - left_over_pct*spread if j < price_level_cnt * 2 else float('-inf')
+            elif j == price_level_cnt * 2 - 1:
+                sell = dp[i-1][j+1] + left_over_pct*prices[i-1] - left_over_pct*spread if j < price_level_cnt * 2 else float('-inf')
+            else:
+                sell = dp[i-1][j+1] + volume_pct*prices[i-1] - volume_pct*spread if j < price_level_cnt * 2 else float('-inf')
+                
+            # Choose the action with the highest PnL
+
+            hold_pnl = hold + (j - price_level_cnt) * position(j) * prices[i]
+            buy_pnl = buy + (j - price_level_cnt) * position(j) * prices[i]
+            sell_pnl = sell + (j - price_level_cnt) * position(j) * prices[i]
+            
+            # print(hold_pnl, buy_pnl, sell_pnl)
+            best_action = max(hold_pnl, buy_pnl, sell_pnl)
+            if best_action == hold_pnl:
+                dp[i][j] = hold
+            elif best_action == buy_pnl:
+                dp[i][j] = buy
+            else:
+                dp[i][j] = sell
+
+            if best_action == hold_pnl:
+                action[i][j] = 'h'
+            elif best_action == buy_pnl:
+                action[i][j] = 'b'
+            else:
+                action[i][j] = 's'
+    # Backtrack to find the sequence of actions
+    trades_list = []
+    # Start from the position with maximum PnL at time n-1
+
+    pnl = np.array(dp[n-1]) + (position_list(np.arange(0,price_level_cnt*2+1)) * prices[n-1])
+    current_position = np.argmax(pnl)
+    for i in range(n-1, -1, -1):
+        trades_list.append(action[i][current_position])
+        if action[i][current_position] == 'b':
+            current_position -= 1
+        elif action[i][current_position] == 's':
+            current_position += 1
+
+    trades_list.reverse()
+    trades_list.append('h')
+    return dp, trades_list, pnl[np.argmax(pnl)]  # Return the actions and the maximum PnL
+
+# Example usage
+dp, trades, max_pnl = optimal_trading_dp(coconut_past_price, 0.99, 185/300)
+# print(trades)
+print("Max PnL:", max_pnl)
+```
+prices being the price over time, volume percentage being on average how much percentage of volume limit you can buy/sell, and spread being the average spread you'd need to cross for each trade. This dp turned out to perform way better than naive dp algorithm and for round 5 alone we were able to generate the most pnl out of all teams including the ranked 1 team.
+
+## Thoughts
 
 [^1]: in the discord, we saw many teams using linear regression on past prices for this, likely inspired by [last year's second place submission](https://github.com/ShubhamAnandJain/IMC-Prosperity-2023-Stanford-Cardinal) 🌲. imho this was a bit silly! doing a linear regression in price space is really just a slightly worse way of performing an average, and you get high multicollinearity since each previous price is highly correlated with its neighbors, and you can really easily overfit (for example, if prices in your data slowly trended up, your learned LR coefficients can add up to be >1, meaning that your algo will bias towards buying, which might be spurious) 
 [^2]: more specifically, we identified two participants in this market: a market making bot with order sizes quite uniform between 20 and 30, and a small bot that would occasionally cross fair with sizes uniform between 1 and 5.
 [^3]: this was very very likely overfit, but the magnitude was so small that it didn't really make a difference in our pnl at all
-[^4]: the south archipelago, where the ducks purportedly live
-[^5]: a lot of our efforts here can be found in [this notebook](https://github.com/ericcccsliu/imc-prosperity-2/blob/main/round2/eric-research.ipynb)
-[^6]: this conviction was strengthened by the fact that the sunlight, humidity data changed very gradually over very long timeframes–even if we could monetize this data, we'd only be able to monetize changes only a couple times each round, which didn't really seem to fit in this higher-frequency trading paradigm
