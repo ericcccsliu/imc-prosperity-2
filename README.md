@@ -65,9 +65,9 @@ This repository contains all of our code–including internal tools, research no
 
 ## tools 🛠️
 
-Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This, overall, was a good decision–while it didn't pay off as much as we hoped (more on this later), we were able to tailor our tools heavily for our own needs. We built two main tools for use throughout the competition: a backtester and a visualization dashboard. In our backtester, we were able to simulate trades taking our limit orders, allowing us to approximate PNL from market-making, which was a feature that the dominant open-source backtester notably lacked. Our visualization dashboard allowed us to observe price trends, investigate individual trades, and visualize the orderbook, which helped immensely in most rounds. 
+Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This, overall, was a good decision–while it didn't pay off as much as we hoped (more on this later), we were able to tailor our tools heavily for our own needs. We built two main tools for use throughout the competition: a backtester and a visualization dashboard. 
 
-### Dashapp
+### dashapp 💨
 
 The dashapp we developed helped us a lot during the early rounds on finding how to generate more pnl and looking for desirable trades our algorithm didn't do or undesirable trades our algorithm did. The most helpful feature in my opinion was the syncing feature, where we coded out such that the whole dashapp would be synced to the exact timestamp whenever we clicked on the dash charts. We also enabled manually typing in timestamp and displaying the orderbook at the given timestamp. 
 
@@ -79,10 +79,12 @@ The dashapp we developed helped us a lot during the early rounds on finding how 
 
 In round 1, we had access to two symbols to trade: amethysts and starfruit. 
 
-### Amethysts: 
-Amethysts are fairly simple. Since the fair price of amethysts is 10,000, our initial algorithm simply traded against bid orders listed above 10,000 and ask orders listed below 10,000. Besides taking orders, our algorithm also quotes with a certain edge. However, from the dashapp we found out that a lot of desirable trades weren't taken by our algorithm because of the position limit. To fix this issue, we implemented a clearing position strategy such that our algorithm would do 0 ev trades just to get the position closer to 0, such that we are capable of doing positive ev trades later on. This strategy bumped our pnl a bit. Finally, we parameterized all our algorithm and ran a couple grid search on the best parameters to use.
+### amethysts 🔮
+Amethysts were fairly simple, as the fair price clearly never deviated from 10,000. As such, we wrote our algorithm to trade against bids above 10,000 and asks below 10,000. Besides taking orders, our algorithm also would market-make, placing bids and asks below and above 10,000, respectively, with a certain edge. Using our backtester, we gridsearched over several different values to find the most profitable edge to request. This worked well, getting us into the 30k range for pnl on backtests.
 
-### Starfruit:
+However, through looking at backtest logs in our dashapp, we discovered that many profitable trades were prevented by our position limits, as we were unable to long or short more than 20 amethysts (and starfruit) at any given moment. To fix this issue, we implemented a strategy to clear our position–our algorithm would do 0 ev trades, if available, just to get the position closer to 0, so that we'd be able to do more positive ev trades later on. This strategy bumped our pnl up a bit, getting us closer to 33,000. 
+
+### starfruit ⭐
 For starfruit, we initially struggled to find a good fair price since its midprice is pretty noisy and would be fluctuating because of over/under aggressive orders. However, as we navigate through out dashapp we found out that at all times there seems to be a market making bot quoting relatively large sizes on both ends. Using the market making mid as a fair price turned out to be much less noisy and generated more pnl in backtests. We tested our algorithm on the website submission and with the pnl data given, we figured out that the website was also marking our pnl to the market making mid instead of the mid price. We were able to verify this by calculating internal pnl graph and it surprisingly matched the pnl graph given by website well. This boosted our confidence in using market making mid as fair price. Besides this, some research on the fair price showed that starfruit was slightly mean reverting, therefore we also implemented that in our fair calculation. The rest was very similar to amethysts where we took orders and quoted orders with a certain edge, and finally optimizing the parameters with a grid search.
 
 After round 1, our team was ranked #3 overall.
