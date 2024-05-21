@@ -146,12 +146,14 @@ After results from this round were released, we found that our actual pnl had a 
 
 ## round 4️⃣
 
-Coconuts and coconuts coupons are introduced in round 4.
-
 ### coconuts/coconut coupon :coconut:
-This round is fairly simple. By applying the Black Scholes model and calculating the implied volatility, it's evident that the implied volatility is mean reverting around 16. We implemented a mean reverting strategy similar to round 3, and calculated the delta of the coconut coupons at each time in order to hedge with coconuts and gain exposure to vol. However, the delta was around 0.53 while the position limts for coconuts/coconut coupons were 300/600, respectively. This meant that we couldn't be fully hedged when holding 600 coupons (we would be holding 18 delta). Since the coupon is far away from expiry (so gamma didn't matter as much) and holding delta with vega is positive ev but large variance, we ran the variance in hopes of making more from our exposure to vol. This worked out in our backtests but during the submission round we lost a bit because of delta exposure, which in retrospect wasn't a smart move as we were already second place and should've went for low var to keep the lead. 
+Coconuts and coconut coupons were introduced in round 4. Coconut coupons were the 10,000 strike call option on coconuts, with a time to expiry of 250 days. The price of coconuts hovered around 10,000, so this option was near-the-money. 
 
-Besides coconuts coupons trades, we also tried to do prediction on orchids price...
+This round was fairly simple. Using Black-Scholes, we calculated the implied volatility of the option, and once we plotted this out, it became clear that the implied vol oscillated around a value of ~16%. We implemented a mean reverting strategy similar to round 3, and calculated the delta of the coconut coupons at each time in order to hedge with coconuts and gain pure exposure to vol. However, the delta was around 0.53 while the position limits for coconuts/coconut coupons were 300/600, respectively. This meant that we couldn't be fully hedged when holding 600 coupons (we would be holding 18 delta). Since the coupon was far away from expiry (thus, gamma didn't matter as much) and holding delta with vega was still positive ev (but higher var), we ran the variance in hopes of making more from our exposure to vol. 
+
+![newplot (3)](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/21fc47f7-727f-48a4-bf4e-b9b9c5fd25a1)
+
+While holding this variance worked out in our backtests, we experienced a fair amount of slippage in our submission–we got unlucky and lost money from our delta exposure. In retrospect, not fully delta hedging might not have been  a smart move–we were already second place and thus should've went for lower var to try and keep the lead. Our algorithm in this round made only 145k, dropping us down to a terrifying 26th place. However, in the results of this round, we saw Puerto Vallarta leap ahead with a whopping profit of 1.2 *million* seashells. We knew we could catch up and end up well within the top 10 if only we could figure out what they did. 
 
 ## round 5️⃣
 
