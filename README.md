@@ -26,6 +26,7 @@ This repository contains research and algorithms for our team, Linear Utility, i
           <img src="https://avatars.githubusercontent.com/u/62641231?v=4?s=100" width="100px;" alt="Eric Liu"/>
           <br /><sub><b>Eric Liu</b></sub></a>
         <br /><sub><a href="https://www.linkedin.com/in/ericccccc/" title="LinkedIn">🔗 LinkedIn</a></sub>
+        <br /><sub><a href="https://www.ericsliu.xyz/" title="Website">🔗 Website</a></sub>
         <br /><a href="#research-ericcccsliu" title="Research">🔬</a>
         <a href="https://github.com/ericcccsliu/imc-prosperity-2/commits?author=ericcccsliu" title="Code">💻</a>
       </td>
