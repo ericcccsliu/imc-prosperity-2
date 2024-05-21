@@ -67,6 +67,8 @@ This repository contains all of our code–including internal tools, research no
 
 Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This, overall, was a good decision–while it didn't pay off as much as we hoped (more on this later), we were able to tailor our tools heavily for our own needs. We built two main tools for use throughout the competition: a backtester and a visualization dashboard. 
 
+### backtester 🔙
+
 ### dashapp 💨
 
 The dashapp we developed helped us a lot during the early rounds on finding how to generate more pnl and looking for desirable trades our algorithm didn't do or undesirable trades our algorithm did. The most helpful feature in my opinion was the syncing feature, where we coded out such that the whole dashapp would be synced to the exact timestamp whenever we clicked on the dash charts. We also enabled manually typing in timestamp and displaying the orderbook at the given timestamp. 
@@ -107,11 +109,11 @@ After round 1, our team was ranked #3 in the world overall. We had an algo tradi
 ### orchids 🥀
 Orchids were introduced in round 2, as well as a bunch of data on sunlight, humidity, import/export tariffs, and shipping costs. The premise was that orchids were grown on a separate island[^4], and had to be imported–subject to import tariffs and shipping costs, and that they would degrade with suboptimal levels of sunlight and humidity. We were able to trade orchids both in a market on our own island, as well as through importing them from the South archipelago. With this, we had two initial approaches. The obvious approach, to us, was to look for alpha in all the data available, investigating if the price of orchids could be predicted using sunlight, humidity, etc. The other approach involved understanding exactly how the mechanisms for trading orchids worked, as the documentation was fairly unclear. Thus, we split up: Eric looked for alpha in the historical data while Jerry worked on understanding the actual trading environment.
 
-Finding tradable correlations in the historical data was tougher than we initially thought. Some things that we tried were: 
+Finding tradable correlations in the historical data was tougher than we initially thought. Some things that we tried were[^5]: 
 - Just trying to find correlations to orchids returns from returns in sunlight, humidity, tarriffs, costs. Initial results from this seemed interesting–but the correlations we found here were likely spurious.
 - Linear regressions from returns in sunlight, humidity, etc., to returns in orchids. We tried varying timeframes–first predicting orchids returns in the same timeframe as the returns in the predictors, and then predicting using lagged returns–building models that predicted future orchids returns over some timeframe using past returns in each of the predictors.
 - Feature engineering with the various features given and performing the previous two steps again with the newly constructed features
-All of these failed to leave us with a convincing model, leading us to believe that the data given was a bit of a distraction[^5]. 
+All of these failed to leave us with a convincing model, leading us to believe that the data given was a bit of a distraction[^6]. 
 
 Meanwhile, Jerry was having much better luck. In experimenting around with the trading environment, we realized that there was a massive taker in the local orchids market. Sell orders–and just sell orders–just a bit above the best bids would be instantly taken for full size. This, combined with low implied ask prices from the foreign market, meant that we could simply put large sell orders locally and simultaneously buy from the south archipelago for an arbitrage. As a first pass, our algorithm running this strategy made 60k seashells over over a fifth of a day. From here, some quick further optimization brought our website test pnl to just over 100k seashells, giving us a projected profit of 500k over a full day. 
 
@@ -136,5 +138,5 @@ After round 3, our team was ranked #2 overall.
 [^2]: more specifically, we identified two participants in this market: a market making bot with order sizes quite uniform between 20 and 30, and a small bot that would occasionally cross fair with sizes uniform between 1 and 5.
 [^3]: this was very very likely overfit, but the magnitude was so small that it didn't really make a difference in our pnl at all
 [^4]: the south archipelago, where the ducks purportedly live
-[^5]: this conviction was strengthened by the fact that the sunlight, humidity data changed very gradually over very long timeframes–even if we could monetize this data, we'd only be able to monetize changes only a couple times each round, which didn't really seem to fit in this higher-frequency trading paradigm
-[^6]: at this point, we still had no clue whether an arb would ever exist, as foreign bid/ask prices weren't given in historical data 
+[^5]: a lot of our efforts here can be found in [this notebook](https://github.com/ericcccsliu/imc-prosperity-2/blob/main/round2/eric-research.ipynb)
+[^6]: this conviction was strengthened by the fact that the sunlight, humidity data changed very gradually over very long timeframes–even if we could monetize this data, we'd only be able to monetize changes only a couple times each round, which didn't really seem to fit in this higher-frequency trading paradigm
