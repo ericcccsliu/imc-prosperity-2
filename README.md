@@ -265,7 +265,7 @@ dp, trades, max_pnl = optimal_trading_dp(coconut_past_price, 0.99, 185/300)
 print("Max PnL:", max_pnl)
 ```
 
-<\details>
+</details>
 
 Our inputs here were prices–we found that generating trades over the predictor timeseries was sufficient due to the high correlation–volume percentage (percent of volume limit on the orderbook at each iteration), and spread (the average spread, cost of each trade), with a target of maximizing pnl. Using this dp algorithm, we generated a string of trades for each symbol, with 'b' or 's' at each index representing the action at each timestamp. Using this algorithm, we achieved an algo pnl of 2.1 million seashells–the highest in this round! This brought us to a final overall standing of second place. 
 
