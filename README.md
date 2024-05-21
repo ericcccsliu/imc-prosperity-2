@@ -175,6 +175,9 @@ The motivation behind the complexity of our dp algorithm was the fact that, at e
 $$8 \rightarrow 7 \rightarrow 12 \rightarrow 10$$
 With a position limit of 2, and with sufficient volume on the orderbook, the optimal trading would be: sell 2 -> buy 4 -> sell 4, with a pnl of 16. Now imagine if you could only buy/sell 2 shares at each iteration. Then, the optimal solution would change–you'd want to buy 2 -> buy 2 -> sell 2, with an overall pnl of 14. 
 
+<details>
+  <summary>our dp code (click to expand)</summary>
+
 ```python
 def optimal_trading_dp(prices, spread, volume_pct):
     n = len(prices)
@@ -261,7 +264,10 @@ dp, trades, max_pnl = optimal_trading_dp(coconut_past_price, 0.99, 185/300)
 # print(trades)
 print("Max PnL:", max_pnl)
 ```
-prices being the price over time, volume percentage being on average how much percentage of volume limit you can buy/sell, and spread being the average spread you'd need to cross for each trade. This dp turned out to perform way better than naive dp algorithm and for round 5 alone we were able to generate the most pnl out of all teams including the ranked 1 team.
+
+<\details>
+
+Our inputs here were prices–we found that generating trades over the predictor timeseries was sufficient due to the high correlation–volume percentage (percent of volume limit on the orderbook at each iteration), and spread (the average spread, cost of each trade), with a target of maximizing pnl. Using this dp algorithm, we generated a string of trades for each symbol, with 'b' or 's' at each index representing the action at each timestamp. Using this algorithm, we achieved an algo pnl of 2.1 million seashells–the highest in this round! This brought us to a final overall standing of second place. 
 
 
 [^1]: in the discord, we saw many teams using linear regression on past prices for this, likely inspired by [last year's second place submission](https://github.com/ShubhamAnandJain/IMC-Prosperity-2023-Stanford-Cardinal) 🌲. imho this was a bit silly! doing a linear regression in price space is really just a slightly worse way of performing an average, and you get high multicollinearity since each previous price is highly correlated with its neighbors, and you can really easily overfit (for example, if prices in your data slowly trended up, your learned LR coefficients can add up to be >1, meaning that your algo will bias towards buying, which might be spurious) 
