@@ -190,7 +190,7 @@ $$8 \rightarrow 7 \rightarrow 12 \rightarrow 10$$
 With a position limit of 2, and with sufficient volume on the orderbook, the optimal trades would be: sell 2 -> buy 4 -> sell 4, with a pnl of 16. Now imagine if you could only buy/sell 2 shares at each iteration. Then, the optimal solution would change–you'd want to buy 2 -> buy 2 -> sell 2, with an overall pnl of 14. 
 <details>
   <summary>our dp code (click to expand)</summary>
-  
+
 ```python
 def optimal_trading_dp(prices, spread, volume_pct):
     n = len(prices)
