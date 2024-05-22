@@ -188,8 +188,10 @@ To do this systematically across the three symbols we wanted to trade (roses, co
 The motivation behind the complexity of our dp algorithm was the fact that, at each iteration, we couldn't necessarily achieve our full desired position–therefore, we needed a state for each potential position that we could feasibly achieve. A simple example of this is to imagine a product going through the following prices: 
 $$8 \rightarrow 7 \rightarrow 12 \rightarrow 10$$
 With a position limit of 2, and with sufficient volume on the orderbook, the optimal trades would be: sell 2 -> buy 4 -> sell 4, with a pnl of 16. Now imagine if you could only buy/sell 2 shares at each iteration. Then, the optimal solution would change–you'd want to buy 2 -> buy 2 -> sell 2, with an overall pnl of 14. 
+
 <details>
   <summary>our dp code (click to expand)</summary>
+
   
 ```python
 def optimal_trading_dp(prices, spread, volume_pct):
@@ -277,6 +279,7 @@ dp, trades, max_pnl = optimal_trading_dp(coconut_past_price, 0.99, 185/300)
 # print(trades)
 print("Max PnL:", max_pnl)
 ```
+
 
 </details>
 Our inputs here were prices–we found that generating trades over the predictor timeseries was sufficient due to the high correlation–volume percentage (percent of volume limit on the orderbook at each iteration), and spread (the average spread, cost of each trade), with a target of maximizing pnl. Using this dp algorithm, we generated a string of trades for each symbol, with `'b'` or `'s'` at each index representing the action at each timestamp. Using this algorithm, we achieved an algo pnl of 2.1 million seashells–the highest over all teams in this round! This brought us to a final overall standing of second place. 
