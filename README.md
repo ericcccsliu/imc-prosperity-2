@@ -53,7 +53,8 @@ This repository contains research and algorithms for our team, Linear Utility, i
 
 ## the competition 🏆
 
-IMC Prosperity 2024 was an algorithmic trading competition that lasted over 15 days, with over 9000 teams participating globally. In the challenge, we were placed on our own archipelago, and tasked with algorithmically trading various financial products, such as amethysts, starfruit, orchids, coconuts, and more, with the goal of maximizing seashells: the underlying currency of our island. The products available to trade started with amethysts and starfruit in round 1. With each subsequent round, more products were added, and at the end of each round, our trading algorithm was evaluated against bot participants in the marketplace, whose behavior we could try and predict through historical data. The PNL from this independent evaluation would then be compared against all other teams. 
+
+IMC Prosperity 2024 was an algorithmic trading competition that lasted over 15 days, with over 9000 teams participating globally. In the challenge, we were tasked with algorithmically trading various products, such as amethysts, starfruit, orchids, coconuts, and more, with the goal of maximizing seashells: the underlying currency of our island. We started trading amethysts and starfruit in round 1, and with each subsequent round, more products were added. At the end of each round, our trading algorithm was evaluated against bot participants in the marketplace, whose behavior we could try and predict through historical data. The PNL from this independent evaluation would then be compared against all other teams. 
 
 In addition to the main algorithmic trading focus, the competition also consisted of manual trading challenges in each round. The focus of these varied widely, and in the end, manual trading accounted for just a small fraction of our PNL. 
 
@@ -61,30 +62,31 @@ For documentation on the algorithmic trading environment, and more context about
 
 ## organization 📂
 
-This repository contains all of our code–including internal tools, research notebooks, raw data and backtesting logs, and all versions of our main algorithmic trader code. The repository is organized by round. Our backtester mostly remained unchanged from round 1, but we simply copied its files over to each subsequent round, so you'll find a version of that in each folder. Within each round, you can locate the algorithmic trading code we used in our final submission by looking for the latest version–for example, for round 1, we used [`round_1_v6.py`](https://github.com/ericcccsliu/imc-prosperity-2/blob/main/round1/round_1_v6.py) for our final submission. Our visualization dashboard is located in the `dashboard` folder. 
+This repository contains all of our code–including internal tools, research notebooks, raw data and backtesting logs, and all versions of our algorithmic trader. The repository is organized by round. Our backtester mostly remained unchanged from round 1, but we simply copied its files over to each subsequent round, so you'll find a version of that in each folder. Within each round, you can locate the algorithmic trading code we used in our final submission by looking for the latest version–for example, for round 1, we used [`round_1_v6.py`](https://github.com/ericcccsliu/imc-prosperity-2/blob/main/round1/round_1_v6.py) for our final submission. Our visualization dashboard is located in the `dashboard` folder. 
 
-## tools 🛠️
+<details>
+<summary><h2>tools 🛠️</h2></summary>
 
-Instead of relying heavily on open-source tools for visualization and backtesting, which many successful teams did, we decided instead to build our tools in-house. This gave us the ability to tailor our tools heavily to our own needs. We built two main tools: a backtester and a visualization dashboard. 
+Instead of relying heavily on open-source tools, which many successful teams did, we decided instead to build our tools in-house. This gave us the ability to tailor our tools heavily to our own needs. We built two main tools: a backtester and a visualization dashboard. 
 
 ### backtester 🔙
 
-We realized we needed a comprehensive backtesting environment in the tutorial round. Our backtester was built to take in historical data and a trading algorithm. With the historical data, it would construct all the necessary information (replicating the actual trading environment perfectly) that our trading algorithm needed, input it into our trading algorithm, and receive the orders that our algorithm would send. Then, it would match those orders to the orderbook in the historical data to generate trades. In order to simulate market making, our backtester would also look at trades between bots from historical data. If there was a trade between bots at a price worse than our own quotes, we'd attribute the trade to ourselves. After running, our backtester would create a log file in the exact same format as the Prosperity website. 
+We realized we needed a comprehensive backtesting environment very early on. Our backtester was built to take in historical data and a trading algorithm. With the historical data, it would construct all the necessary information (replicating the actual trading environment perfectly) that our trading algorithm needed, input it into our trading algorithm, and receive the orders that our algorithm would send. Then, it would match those orders to the orderbook to generate trades. In order to simulate market making, we would also look at trades between bots at each iteration. If there was a trade between bots at a price worse than our own quotes, we'd attribute the trade to ourselves. After running, our backtester would create a log file in the exact same format as the Prosperity website. 
 
-Because we often found ourselves backtesting over various parameters to find the best combination, we also modified our trader class to optionally take in parameters as a dictionary upon instantiation. This allowed us to quickly gridsearch over all possible parameters in our backtests by setting up simple loops, allowing us to quickly optimize our ideas. 
+Because we often found ourselves backtesting over various parameters to find the best combination, we also modified our trader class to optionally take in trading parameters as a dictionary upon instantiation. This allowed us to gridsearch over all possible parameters in backtesting, allowing us to quickly optimize our ideas. 
 
 ### dashboard 💨
 
-The dashboard we developed helped us a lot during the early rounds in pnl generation, allowing us to develop new alpha, and later optimize our alphas by finding desirable trades our algorithm didn't do or undesirable trades that our algorithm did. One extremely helpful feature we developed was a syncing functionality, where clicking on a graph (or entering a specific timestamp manually) would synchronize all visualizations to that timestamp, allowing us to explore local anomalies in depth. 
+The dashboard we developed helped us a lot during the early rounds in pnl generation, allowing us to develop new alpha and also optimize our alphas by finding desirable trades our algorithm didn't do or undesirable trades that our algorithm did. One extremely helpful feature we developed was a syncing functionality, where clicking on a graph (or entering a specific timestamp manually) would synchronize all visualizations to that timestamp, allowing us to explore local anomalies in depth. 
 
 ![332262673-fb1ab2d8-72a6-4d95-bbaa-ab15cd578a8d](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/5878101d-53e3-46c1-a646-85bb84bd0b3d)
 <p align="center">
   <em>we used to have actual section headers, but at some point we (Jerry and Eric) got hungry and started editing them</em>
 </p>
 
-
-
-## round 1️⃣
+</details>
+<details>
+<summary><h2>round 1️⃣</h2></summary>
 
 In round 1, we had access to two symbols to trade: amethysts and starfruit. 
 
@@ -104,12 +106,14 @@ However, using the mid price–even in averaging over it–didn't seem to be the
   <em>histograms of volumes on the first and second level of the bid side</em>
 </p>
 
-Surprisingly, when we tested our algorithm on the website, we figured out that the website was  marking our pnl to the market maker's mid instead of the actual mid price. We were able to verify this by backtesting a trading algorithm that bought 1 starfruit in the first timestamp and simply held it to the end–our pnl graph marked to market maker mid in our own backtesting environment exactly replicated the pnl graph on the website. This boosted our confidence in using the market maker mid as fair, as we realized that we'd just captured the true internal fair of the game. Besides this, some research on the fair price showed that starfruit was very slightly mean reverting[^3], and the rest was very similar to amethysts, where we took orders and quoted orders with a certain edge, optimizing all parameters in our internal backtester with a grid search.
+Surprisingly, when we tested our algorithm on the website, we figured out that the website was marking our pnl to the market maker's mid instead of the actual mid price. We were able to verify this by backtesting a trading algorithm that bought 1 starfruit in the first timestamp and simply held it to the end–our pnl graph marked to market maker mid in our own backtesting environment exactly replicated the pnl graph on the website. This boosted our confidence in using the market maker mid as fair, as we realized that we'd just captured the true internal fair of the game. Besides this, some research on the fair price showed that starfruit was very slightly mean reverting[^3], and the rest was very similar to amethysts, where we took orders and quoted orders with a certain edge, optimizing all parameters in our internal backtester with a grid search.
 
 After round 1, our team was ranked #3 in the world overall. We had an algo trading profit of 34,498 seashells–just 86 seashells behind first place.
 
-## round 2️⃣
+</details>
 
+<details>
+<summary><h2>round 2️⃣</h2></summary>
 ### orchids 🥀
 Orchids were introduced in round 2, as well as a bunch of data on sunlight, humidity, import/export tariffs, and shipping costs. The premise was that orchids were grown on a separate island[^4], and had to be imported–subject to import tariffs and shipping costs, and that they would degrade with suboptimal levels of sunlight and humidity. We were able to trade orchids both in a market on our own island, as well as through importing them from the South archipelago. With this, we had two initial approaches. The obvious approach, to us, was to look for alpha in all the data available, investigating if the price of orchids could be predicted using sunlight, humidity, etc. The other approach involved understanding exactly how the mechanisms for trading orchids worked, as the documentation was fairly unclear. Thus, we split up: Eric looked for alpha in the historical data while Jerry worked on understanding the actual trading environment.
 
@@ -126,8 +130,9 @@ While we figured this out independently, someone in the discord leaked this same
 
 Even with these optimizations, we still were beat out by the surge of teams who also found the arbitrage. We dropped all the way to 17th place, with a profit of 573,000 seashells from algo trading. We were within 20k of the second place team, and 100k away from the first place team, Puerto Vallarta, who seemed to have figured something out this round that no other teams could find. 
 
-## round 3️⃣
-
+</details>
+<details>
+<summary><h2>round 3️⃣</h2></summary>
 Gift baskets :basket:, chocolate 🍫, roses 🌹, and strawberries 🍓 were introduced in round 3, where a gift basket consisted of 4 chocolate bars, 6 strawberries, and a single rose. This round, we mainly traded spreads, which we defined as `basket - synthetic`, with `synthetic` being the sum of the price of all products in a basket.
 
 ### spread 🧈
@@ -149,8 +154,10 @@ Therefore, we developed a more adaptive algorithm for spreads. We traded on a mo
 
 After results from this round were released, we found that our actual pnl had a significant amount of slippage compared to our backtests–we made only 111k seashells from our algo. Nevertheless, we got a bit lucky–all the teams ahead of us in this round seemed to overfit significantly more, as we were ranked #2 overall.
 
-## round 4️⃣
-
+</details>
+<details>
+<summary><h2>round 4️⃣</h2></summary>
+  
 ### coconuts/coconut coupon :coconut:
 Coconuts and coconut coupons were introduced in round 4. Coconut coupons were the 10,000 strike call option on coconuts, with a time to expiry of 250 days. The price of coconuts hovered around 10,000, so this option was near-the-money. 
 
@@ -159,12 +166,13 @@ This round was fairly simple. Using Black-Scholes, we calculated the implied vol
 ![newplot (3)](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/21fc47f7-727f-48a4-bf4e-b9b9c5fd25a1)
 
 While holding this variance worked out in our backtests, we experienced a fair amount of slippage in our submission–we got unlucky and lost money from our delta exposure. In retrospect, not fully delta hedging might not have been  a smart move–we were already second place and thus should've went for lower var to try and keep the lead. Our algorithm in this round made only 145k, dropping us down to a terrifying 26th place. However, in the results of this round, we saw Puerto Vallarta leap ahead with a whopping profit of 1.2 *million* seashells. We knew we could catch up and end up well within the top 10 if only we could figure out what they did. 
-
-## round 5️⃣ :cheese:
-
+</details>
+<details>
+<summary><h2>round 5️⃣</h2></summary>
+  
 ![image](https://github.com/ericcccsliu/imc-prosperity-2/assets/62641231/5d3bbc3b-9d16-473e-a6da-954a84a66da9)
 
-Our leading hypothesis in trying to replicate Puerto Vallarta's profits were that they must've found some way to predict the future–profits on the order of 1.2 million could reasonably match up with a successful stat. arb strategy across multiple symbols. So, we started blasting away with linear regressions on lagged and synchronous returns across all symbols and all days of our data, with the hypothesis that symbols from different days could have correlations that we'd previously missed. However, we didn't find anything particularly interesting here–starfruits seemed to have a bit of lagged predictive power in all other symbols, but we weren't able to unearth anything that could account for anything close to 1.2 million seashells in additional profits. 
+Our leading hypothesis in trying to replicate Puerto Vallarta's profits were that they must've found some way to predict the future–profits on the order of 1.2 million could reasonably match up with a successful stat. arb strategy across multiple symbols. So, we started blasting away with linear regressions on lagged and synchronous returns across all symbols and all days of our data, with the hypothesis that symbols from different days could have correlations that we'd previously missed. However, we didn't find anything particularly interesting here–starfruits seemed to have a bit of lagged predictive power in all other symbols, but this couldn't explain 1.2 million in additional profits.
 
 As a last-ditch attempt in this front, we recalled that last year's competition (which we read about in [Stanford Cardinal's awesome writeup](https://github.com/ShubhamAnandJain/IMC-Prosperity-2023-Stanford-Cardinal)) had many similarities to this competition–especially in the first round, where the symbols we traded basically sounded the exact same. So, we went and sourced last year's data from public GitHub repositories, and performed a linear regression from returns in each of last year's symbols to returns in each symbol of this year. The results we found were surprising: diving gear returns from last year's competition, with a multiplier of ~3, was almost a perfect predictor of roses, with a $R^2$ of 0.99. Additionally, coconuts from last year was a perfect predictor of coconuts from this year, with a beta of 1.25 and an $R^2$ of 0.99.
 
@@ -179,10 +187,9 @@ To do this systematically across the three symbols we wanted to trade (roses, co
 The motivation behind the complexity of our dp algorithm was the fact that, at each iteration, we couldn't necessarily achieve our full desired position–therefore, we needed a state for each potential position that we could feasibly achieve. A simple example of this is to imagine a product going through the following prices: 
 $$8 \rightarrow 7 \rightarrow 12 \rightarrow 10$$
 With a position limit of 2, and with sufficient volume on the orderbook, the optimal trading would be: sell 2 -> buy 4 -> sell 4, with a pnl of 16. Now imagine if you could only buy/sell 2 shares at each iteration. Then, the optimal solution would change–you'd want to buy 2 -> buy 2 -> sell 2, with an overall pnl of 14. 
-
 <details>
   <summary>our dp code (click to expand)</summary>
-
+  
 ```python
 def optimal_trading_dp(prices, spread, volume_pct):
     n = len(prices)
@@ -271,8 +278,9 @@ print("Max PnL:", max_pnl)
 ```
 
 </details>
-
 Our inputs here were prices–we found that generating trades over the predictor timeseries was sufficient due to the high correlation–volume percentage (percent of volume limit on the orderbook at each iteration), and spread (the average spread, cost of each trade), with a target of maximizing pnl. Using this dp algorithm, we generated a string of trades for each symbol, with `'b'` or `'s'` at each index representing the action at each timestamp. Using this algorithm, we achieved an algo pnl of 2.1 million seashells–the highest over all teams in this round! This brought us to a final overall standing of second place. 
+
+</details>
 
 
 [^1]: in the discord, we saw many teams using linear regression on past prices for this, likely inspired by [last year's second place submission](https://github.com/ShubhamAnandJain/IMC-Prosperity-2023-Stanford-Cardinal) 🌲. imho this was a bit silly! doing a linear regression in price space is really just a slightly worse way of performing an average, and you get high multicollinearity since each previous price is highly correlated with its neighbors, and you can really easily overfit (for example, if prices in your data slowly trended up, your learned LR coefficients can add up to be >1, meaning that your algo will bias towards buying, which might be spurious) 
